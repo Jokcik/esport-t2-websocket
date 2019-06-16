@@ -6,7 +6,7 @@ import {
   WebSocketServer, WsResponse
 } from "@nestjs/websockets";
 import { Server } from 'socket.io';
-import {Inject, Logger} from "@nestjs/common";
+import { Inject, Logger, OnModuleInit } from '@nestjs/common';
 import {WebsocketService} from "./websocket-clients/websocket.service";
 import {ISocket} from "./shared/socket.interface";
 import {WebsocketEvents} from "./shared/events";
@@ -15,7 +15,7 @@ import {catchError} from "rxjs/operators";
 import {WebsocketFeedController} from "./websocket-feed/websocket-feed.controller";
 
 @WebSocketGateway({ path: '/feed' })
-export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
   @WebSocketServer()
   public server: Server;
 
@@ -60,5 +60,9 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       this.logger.log('error onResult', value);
       return EMPTY;
     }));
+  }
+
+  onModuleInit(): any {
+    this.websocketService.setServer(this.server);
   }
 }

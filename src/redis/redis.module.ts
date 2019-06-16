@@ -6,13 +6,15 @@ import { RedisService } from './redis.service';
 import { RedisLogger } from "../websocket/shared/socket.interface";
 import {EventsModule} from "../events/events.module";
 import {NotifyRedisService} from "./notify-redis.service";
+import { WebsocketClientsModule } from '../websocket/websocket-clients/websocket-clients.module';
 
 promisifyAll(RedisClient.prototype);
 promisifyAll(Multi.prototype);
 
 @Module({
   imports: [
-    EventsModule
+    EventsModule,
+    WebsocketClientsModule
   ],
   providers: [
     RedisLogger,

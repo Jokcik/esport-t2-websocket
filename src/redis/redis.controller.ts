@@ -3,19 +3,25 @@ import {RedisService} from './redis.service';
 import {FeedTypes} from "./shared/feed-types.enum";
 import {NotifyRedisService} from "./notify-redis.service";
 import * as cluster from "cluster";
+import { WebsocketClientsService } from '../websocket/websocket-clients/websocket-clients.service';
 
 @Injectable()
 export class RedisController implements OnModuleInit {
   private feedChannel = 'notify:event';
+  private objectChannel = 'notify:object';
 
   constructor(private redisService: RedisService,
-              private notifyRedisService: NotifyRedisService) {
+              private notifyRedisService: NotifyRedisService,
+              private websocketClientsService: WebsocketClientsService) {
   }
 
   public onModuleInit(): any {
     if (cluster.isMaster) {
-      this.redisService.subscribeFeed(this.feedChannel)
+      this.redisService.subscribe(this.feedChannel)
         .subscribe(([type, data]) => this.parseFeedEvents(type, data));
+
+      this.redisService.subscribe(this.objectChannel)
+        .subscribe(([type, data]) => this.parseObjectEvent(type, data));
     }
   }
 
@@ -34,7 +40,7 @@ export class RedisController implements OnModuleInit {
     }
   }
 
-  private() {
-
+  private parseObjectEvent(type: string, data: any) {
+    this.websocketClientsService.broadcast('notify.objects', type, data);
   }
 }

@@ -11,7 +11,7 @@ export class RedisService {
     this.subscriber = subscriber;
   }
 
-  public subscribeFeed<T>(channel: string): Observable<[ FeedTypes, T ]> {
+  public subscribe<T>(channel: string): Observable<[ FeedTypes, T ]> {
     this.subscriber.subscribe(channel);
     return new Observable(observer => {
       this.subscriber.on("message", (channelMessage, data) => {

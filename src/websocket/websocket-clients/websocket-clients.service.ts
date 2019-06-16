@@ -25,6 +25,10 @@ export class WebsocketClientsService implements OnModuleInit {
     userIds.forEach(id => this.sendTo(id, event, data));
   }
 
+  public broadcast(channel: string, type: string, data: any) {
+    this.socketService.broadcast(channel, type, data);
+  }
+
   onModuleInit(): any {
     if (!cluster.isMaster) { return; }
 

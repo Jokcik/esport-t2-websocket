@@ -3,10 +3,12 @@ import { ISocket } from '../shared/socket.interface';
 import {TokenStrategy} from "../../authenticate/token.strategy";
 import {AUser} from "../../authenticate/shared/a-user";
 import {User} from "../../authenticate/shared/user.interface";
+import { Server } from 'socket.io';
 
 @Injectable()
 export class WebsocketService {
   public clients: ISocket[] = [];
+  private server: Server;
 
   constructor(private tokenStrategy: TokenStrategy,
               @Inject('Logger') private logger: LoggerService) {
@@ -30,5 +32,13 @@ export class WebsocketService {
 
   public isUserConnected(userId) {
     return this.clients.some(c => c.user && c.user._id.toString() == userId.toString());
+  }
+
+  public broadcast(channel: string, type: string, data: any) {
+    this.server.emit(channel, [ type, data ]);
+  }
+
+  public setServer(server: Server) {
+    this.server = server;
   }
 }

@@ -14,7 +14,7 @@ import {EMPTY, Observable} from "rxjs";
 import {catchError} from "rxjs/operators";
 import {WebsocketFeedController} from "./websocket-feed/websocket-feed.controller";
 
-@WebSocketGateway(3003, { path: '/feed' })
+@WebSocketGateway({ path: '/feed' })
 export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   public server: Server;

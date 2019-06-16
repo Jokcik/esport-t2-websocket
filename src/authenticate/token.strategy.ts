@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {Model} from 'mongoose';
 import {AUser} from './shared/a-user';
 import {Strategy} from 'passport-token-auth';

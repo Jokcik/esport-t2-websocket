@@ -4,7 +4,6 @@ import {MongooseModule} from '@nestjs/mongoose';
 import {UserModelName} from "../core/constants";
 import {UserSchema} from "../core/schema/user.schema";
 import {UserService} from "./user.service";
-import {CWUtils} from "../core/cw-utils";
 
 @Global()
 @Module({
@@ -16,12 +15,10 @@ import {CWUtils} from "../core/cw-utils";
   providers: [
     TokenStrategy,
     UserService,
-    CWUtils
   ],
   exports: [
     TokenStrategy,
     UserService,
-    CWUtils
   ]
 })
 export class AuthModule {

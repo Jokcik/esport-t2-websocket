@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {EventsService} from "../../events/events.service";
-import {AUser} from "../../authenticate/a-user";
+import {AUser} from "../../authenticate/shared/a-user";
 
 @Injectable()
 export class WebsocketFeedService {

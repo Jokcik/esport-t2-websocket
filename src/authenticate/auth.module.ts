@@ -1,23 +1,27 @@
 import {Global, Module} from '@nestjs/common';
-import {DatabaseModule} from '../database/database.module';
 import {TokenStrategy} from './token.strategy';
-import {usersProviders} from '../users/users.providers';
 import {MongooseModule} from '@nestjs/mongoose';
-import {UsersModule} from "../users/users.module";
+import {UserModelName} from "../core/constants";
+import {UserSchema} from "../core/schema/user.schema";
+import {UserService} from "./user.service";
+import {CWUtils} from "../core/cw-utils";
 
 @Global()
 @Module({
   imports: [
-    UsersModule,
-    MongooseModule,
-    DatabaseModule
+    MongooseModule.forFeature([
+      { name: UserModelName, schema: UserSchema }
+    ]),
   ],
   providers: [
     TokenStrategy,
-    ...usersProviders,
+    UserService,
+    CWUtils
   ],
   exports: [
     TokenStrategy,
+    UserService,
+    CWUtils
   ]
 })
 export class AuthModule {

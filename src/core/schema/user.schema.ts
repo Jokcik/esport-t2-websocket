@@ -1,6 +1,6 @@
 import * as mongoose from 'mongoose';
 import {Schema} from "mongoose";
-import {GameModelName} from "../../core/constants";
+import {GameModelName} from "../constants";
 
 export const CupProfileAccount = new mongoose.Schema({
   account: String,

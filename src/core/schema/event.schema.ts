@@ -1,7 +1,5 @@
 import * as mongoose from 'mongoose';
 import {Schema} from 'mongoose';
-import {CupTeamPlayerModelName, GameModelName, StreamModelName, UserModelName} from '../../core/constants';
-import Mixed = Schema.Types.Mixed;
 
 export const EventObjSchema = new mongoose.Schema({
   id: String,

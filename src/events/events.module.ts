@@ -1,12 +1,10 @@
-import { Module } from '@nestjs/common';
-import {CupModelName, CupTeamPlayerModelName, EventModelName} from "../core/constants";
-import {CupTeamPlayerSchema} from "../cups/schemas/cup-player.schema";
-import {CupSchema} from "../cups/schemas/cup.schema";
+import {Module} from '@nestjs/common';
+import {EventModelName} from "../core/constants";
 import {MongooseModule} from '@nestjs/mongoose';
-import {EventSchema} from "./schemas/event.schema";
 import {EventsService} from "./events.service";
 import {NotifyEventService} from "./notify-event.service";
 import {WebsocketClientsModule} from "../websocket/websocket-clients/websocket-clients.module";
+import {EventSchema} from "../core/schema/event.schema";
 
 @Module({
   imports: [

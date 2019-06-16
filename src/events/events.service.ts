@@ -3,9 +3,9 @@ import {DeepPartial, EventModelName} from "../core/constants";
 import {Model, Schema} from "mongoose";
 import {NotifyEvent, Status} from "./interface/event";
 import {InjectModel} from '@nestjs/mongoose';
-import {AUser} from "../authenticate/a-user";
 import {Types} from "mongoose";
 import ObjectId = Types.ObjectId;
+import {AUser} from "../authenticate/shared/a-user";
 
 @Injectable()
 export class EventsService {

@@ -1,8 +1,8 @@
-import {Injectable, OnModuleInit} from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { WebsocketService } from './websocket.service';
 import { WebsocketEvents } from '../shared/events';
 import * as cluster from "cluster";
-import {hub} from "../../core/hub";
+import { hub } from "../../core/hub";
 
 
 @Injectable()
@@ -22,12 +22,7 @@ export class WebsocketClientsService implements OnModuleInit {
   }
 
   public sendMany(event: WebsocketEvents, data: any, ...userIds: string[]) {
-    if (cluster.isMaster) {
-      userIds.forEach(id => this.sendTo(id, event, data));
-      return;
-    }
-
-    hub.sendToMaster('sendMany', { event, data, userIds });
+    userIds.forEach(id => this.sendTo(id, event, data));
   }
 
   onModuleInit(): any {

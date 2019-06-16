@@ -24,6 +24,13 @@ export class RedisController implements OnModuleInit {
       case FeedTypes.CHANNEL_ONLINE: return this.notifyRedisService.eventChannelOnline(data);
       case FeedTypes.REGISTER_CONFIRM_PHONE: return this.notifyRedisService.eventRegisterConfirmPhone(data);
       case FeedTypes.REGISTER_CHANNEL: return this.notifyRedisService.eventRegisterChannel(data);
+
+      case FeedTypes.SUCCESS_PREMIUM: return this.notifyRedisService.notifySuccessPremium(data);
+      case FeedTypes.CREATE_TEAM: return this.notifyRedisService.notifyCreateTeam(data);
+      case FeedTypes.PAYMENT_TICKETS: return this.notifyRedisService.notifyPaymentTickets(data);
+      case FeedTypes.REGISTER_CUP: return this.notifyRedisService.notifyRegisterCup(data);
+      case FeedTypes.CONFIRM_CUP: return this.notifyRedisService.notifyConfirmCup(data);
+      case FeedTypes.NEW_MATCH: return this.notifyRedisService.notifyNewMatch(data);
     }
   }
 

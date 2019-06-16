@@ -1,8 +1,8 @@
 import { Inject, Injectable, LoggerService } from '@nestjs/common';
 import { ISocket } from '../shared/socket.interface';
 import {TokenStrategy} from "../../authenticate/token.strategy";
-import {User} from "../../users/interfaces/user.interface";
-import {AUser} from "../../authenticate/a-user";
+import {AUser} from "../../authenticate/shared/a-user";
+import {User} from "../../authenticate/shared/user.interface";
 
 @Injectable()
 export class WebsocketService {

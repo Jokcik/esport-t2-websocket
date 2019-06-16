@@ -2,7 +2,6 @@ import {Injectable} from "@nestjs/common";
 import {EventsService} from "./events.service";
 import {DeepPartial} from "../core/constants";
 import {EventTypeButton, EventTypeEnum, NotifyEvent, Status} from "./interface/event";
-import {AUser, UserEntity} from "../authenticate/a-user";
 import {
   getChannelLink,
   getChannelSettingsLink, getCupLink, getCupsLink, getMatchLink,
@@ -13,7 +12,8 @@ import {
 import {getUserAvatar} from "./interface/avatar-notify";
 import {WebsocketClientsService} from "../websocket/websocket-clients/websocket-clients.service";
 import {WebsocketEvents} from "../websocket/shared/events";
-import {User} from "../users/interfaces/user.interface";
+import {AUser, UserEntity} from "../authenticate/shared/a-user";
+import {User} from "../authenticate/shared/user.interface";
 
 @Injectable()
 export class NotifyEventService {
@@ -42,7 +42,7 @@ export class NotifyEventService {
     this.newEvent(notify);
   }
 
-  public notifySuccessPremium(user: AUser, type: string) {
+  public notifySuccessPremium(user: UserEntity, type: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
     notify.info = { prefix: 'вы успешно активировали подписку', title: type, postfix: 'для управления подписками перейдите на страницу настроек.' };
     notify.to = { id: user._id, avatar: getUserAvatar(user.avatar), link: getUserLink(user.username), title: user.username };
@@ -52,7 +52,7 @@ export class NotifyEventService {
     this.newEvent(notify);
   }
 
-  public notifyCreateTeam(user: AUser, teamTitle: string, teamId: string) {
+  public notifyCreateTeam(user: UserEntity, teamTitle: string, teamId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
     notify.info = { prefix: 'ваша команда', title: teamTitle, link: getTeamLink(teamId), postfix: 'успешно создана. Чтобы пригласить игроков, перейдите на страницу настроек' };
     notify.to = { id: user._id, avatar: getUserAvatar(user.avatar), link: getUserLink(user.username), title: user.username };
@@ -62,7 +62,7 @@ export class NotifyEventService {
     this.newEvent(notify);
   }
 
-  public notifyPaymentTickets(user: User, tickets: number) {
+  public notifyPaymentTickets(user: UserEntity, tickets: number) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
     notify.info = { prefix: `вы успешно приобрели ${tickets} электронных билет (ов). Вы можете принять участие в турнирах с призовым фондом` };
     notify.to = { id: user._id, avatar: getUserAvatar(user.avatar), link: getUserLink(user.username), title: user.username };

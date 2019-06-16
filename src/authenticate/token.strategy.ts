@@ -1,16 +1,16 @@
 import {Inject, Injectable} from '@nestjs/common';
-import {UserModelToken} from '../core/constants';
 import {Model} from 'mongoose';
-import {User} from '../users/interfaces/user.interface';
-import {AUser} from './a-user';
+import {AUser} from './shared/a-user';
 import {Strategy} from 'passport-token-auth';
 import {PassportStrategy} from '@nestjs/passport';
-import {UsersService} from "../users/users.service";
+import {User} from "./shared/user.interface";
+import {InjectModel} from '@nestjs/mongoose';
+import {UserModelName} from "../core/constants";
 
 @Injectable()
 export class TokenStrategy extends PassportStrategy(Strategy) {
-  constructor(@Inject(UserModelToken) private readonly userModel: Model<User>) {
-    super({});
+  constructor(@InjectModel(UserModelName) private readonly userModel: Model<User>) {
+    super();
   }
 
   public getUserByToken(token: string): Promise<User> {

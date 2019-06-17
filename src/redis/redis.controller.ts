@@ -2,7 +2,6 @@ import {Injectable, OnModuleInit} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {FeedTypes} from "./shared/feed-types.enum";
 import {NotifyRedisService} from "./notify-redis.service";
-import * as cluster from "cluster";
 import { WebsocketClientsService } from '../websocket/websocket-clients/websocket-clients.service';
 
 @Injectable()
@@ -16,13 +15,11 @@ export class RedisController implements OnModuleInit {
   }
 
   public onModuleInit(): any {
-    if (cluster.isMaster) {
-      this.redisService.subscribe(this.feedChannel)
-        .subscribe(([type, data]) => this.parseFeedEvents(type, data));
+    this.redisService.subscribe(this.feedChannel)
+      .subscribe(([type, data]) => this.parseFeedEvents(type, data));
 
-      this.redisService.subscribe(this.objectChannel)
-        .subscribe(([type, data]) => this.parseObjectEvent(type, data));
-    }
+    this.redisService.subscribe(this.objectChannel)
+      .subscribe(([type, data]) => this.parseObjectEvent(type, data));
   }
 
   private parseFeedEvents(type: FeedTypes, data: any) {
@@ -41,6 +38,6 @@ export class RedisController implements OnModuleInit {
   }
 
   private parseObjectEvent(type: string, data: any) {
-    this.websocketClientsService.broadcast('notify.objects', type, data);
+    this.websocketClientsService.broadcast(`notify.objects:${type}`, data);
   }
 }

@@ -34,8 +34,8 @@ export class WebsocketService {
     return this.clients.some(c => c.user && c.user._id.toString() == userId.toString());
   }
 
-  public broadcast(channel: string, type: string, data: any) {
-    this.server.emit(channel, [ type, data ]);
+  public broadcast(channel: string, data: any) {
+    this.server.in(channel).emit(data);
   }
 
   public setServer(server: Server) {

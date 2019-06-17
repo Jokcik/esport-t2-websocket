@@ -3,7 +3,7 @@ import {WebsocketFeedService} from './websocket-feed.service';
 import {WebsocketEvents} from '../shared/events';
 import {WsResponse} from '@nestjs/websockets';
 import {ISocket} from "../shared/socket.interface";
-import {Observable} from "rxjs";
+import { EMPTY, Observable } from 'rxjs';
 import {NotifyEvent} from "../../events/interface/event";
 import {map} from "rxjs/operators";
 import {fromPromise} from "rxjs/internal-compatibility";
@@ -11,6 +11,17 @@ import {fromPromise} from "rxjs/internal-compatibility";
 @Injectable()
 export class WebsocketFeedController {
   constructor(private socketFeed: WebsocketFeedService) {
+  }
+
+  public notifyObjects(client: ISocket, data: any) {
+    client.join(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`);
+    client.on('disconnect', () => client.leave(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`));
+    return EMPTY;
+  }
+
+  public notifyObjectsUnsubscribe(client: ISocket, data: any) {
+    client.leave(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`);
+    return EMPTY;
   }
 
   public getEvents(client: ISocket, data?: any): Observable<WsResponse<NotifyEvent[]>> {

@@ -3,4 +3,7 @@ export enum WebsocketEvents {
   NEW_EVENT = 'notify.new_event',
   DELETE_EVENT = 'notify.delete_event',
   READ_EVENTS = 'notify.read_events',
+
+  NOTIFY_OBJECTS = 'notify.objects',
+  NOTIFY_OBJECTS_UNSUBSCRIBE = 'notify.objects.unsubscribe',
 }

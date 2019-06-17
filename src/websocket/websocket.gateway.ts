@@ -40,6 +40,16 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     }
   }
 
+  @SubscribeMessage(WebsocketEvents.NOTIFY_OBJECTS)
+  public onObjects(client: ISocket, data: any): Observable<WsResponse<any>> {
+    return this.onResult(this.websocketFeedController.notifyObjects(client, data));
+  }
+
+  @SubscribeMessage(WebsocketEvents.NOTIFY_OBJECTS_UNSUBSCRIBE)
+  public unsubscribeObjects(client: ISocket, data: any): Observable<WsResponse<any>> {
+    return this.onResult(this.websocketFeedController.notifyObjectsUnsubscribe(client, data));
+  }
+
   @SubscribeMessage(WebsocketEvents.GET_EVENTS)
   public getEvents(client: ISocket, data: any): Observable<WsResponse<any>> {
     return this.onResult(this.websocketFeedController.getEvents(client, data));

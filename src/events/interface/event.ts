@@ -1,4 +1,5 @@
 import {Document} from 'mongoose';
+import {Types} from "mongoose";
 
 export enum Status {
   ACTIVE = 'ACTIVE',
@@ -41,7 +42,7 @@ export class EventObj {
 }
 
 export interface NotifyEvent extends Document {
-  _id: string;
+  _id: string | Types.ObjectId;
   createdAt: Date;
   info: FeedEventInfo;
   from: EventObj;

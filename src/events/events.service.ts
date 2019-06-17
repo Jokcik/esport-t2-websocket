@@ -1,11 +1,10 @@
-import {ForbiddenException, Injectable} from '@nestjs/common';
-import {DeepPartial, EventModelName} from "../core/constants";
-import {Model, Schema} from "mongoose";
-import {NotifyEvent, Status} from "./interface/event";
-import {InjectModel} from '@nestjs/mongoose';
-import {Types} from "mongoose";
+import { ForbiddenException, Injectable } from '@nestjs/common';
+import { DeepPartial, EventModelName } from '../core/constants';
+import { Model, Types } from 'mongoose';
+import { NotifyEvent, Status } from './interface/event';
+import { InjectModel } from '@nestjs/mongoose';
+import { AUser } from '../authenticate/shared/a-user';
 import ObjectId = Types.ObjectId;
-import {AUser} from "../authenticate/shared/a-user";
 
 @Injectable()
 export class EventsService {
@@ -34,7 +33,6 @@ export class EventsService {
   }
 
   public async saveEvent(notify: DeepPartial<NotifyEvent>) {
-    const event = await this.eventModel.create(notify);
-    return event.save();
+    return await this.eventModel.findOneAndUpdate({ _id: notify._id }, notify, { upsert: true, new: true });
   }
 }

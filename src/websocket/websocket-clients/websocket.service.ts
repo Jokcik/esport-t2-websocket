@@ -35,7 +35,7 @@ export class WebsocketService {
   }
 
   public broadcast(channel: string, data: any) {
-    this.server.in(channel).emit(data);
+    this.server.in(channel).emit(channel, data);
   }
 
   public setServer(server: Server) {

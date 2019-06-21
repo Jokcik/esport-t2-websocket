@@ -1,7 +1,7 @@
 import {Injectable} from "@nestjs/common";
 import {EventsService} from "./events.service";
 import {DeepPartial} from "../core/constants";
-import {EventTypeButton, EventTypeEnum, NotifyEvent, Status} from "./interface/event";
+import { ButtonEventPayload, EventTypeButton, EventTypeEnum, NotifyEvent, Status } from './interface/event';
 import {
   getChannelLink,
   getChannelSettingsLink, getCupLink, getCupsLink, getMatchLink,
@@ -9,7 +9,7 @@ import {
   getTeamLink, getTeamPlayersLink,
   getUserLink
 } from "./interface/link-notify";
-import {getUserAvatar} from "./interface/avatar-notify";
+import { getSystemAvatar, getUserAvatar } from './interface/avatar-notify';
 import {WebsocketClientsService} from "../websocket/websocket-clients/websocket-clients.service";
 import {WebsocketEvents} from "../websocket/shared/events";
 import {AUser, UserEntity} from "../authenticate/shared/a-user";
@@ -98,6 +98,15 @@ export class NotifyEventService {
     notify.to = { id: toId, avatar: toAvatar, link: toLink, title: toUsername };
     notify.payload[0].link = getMatchLink(cupUrl, matchId);
     notify.payload[0].title = 'Страница матча';
+
+    this.newEvent(notify, uniqueId);
+  }
+
+  public notifySystemEvent(user: UserEntity, prefix: string, title: string, link: string, postfix: string, payload: ButtonEventPayload, uniqueId: string) {
+    const notify = this.createDefaultNotify();
+    notify.info = { prefix, title, link, postfix };
+    notify.to = { id: user._id, avatar: getSystemAvatar(), title: user.username  };
+    notify.payload[0] = payload;
 
     this.newEvent(notify, uniqueId);
   }

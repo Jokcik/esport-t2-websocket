@@ -1,6 +1,7 @@
 import {Injectable} from "@nestjs/common";
 import {NotifyEventService} from "../events/notify-event.service";
 import {UserEntity} from "../authenticate/shared/a-user";
+import { ButtonEventPayload } from '../events/interface/event';
 
 @Injectable()
 export class NotifyRedisService {
@@ -41,5 +42,9 @@ export class NotifyRedisService {
 
   public notifyNewMatch(data: { toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, _uniqueId: string }) {
     this.notifyEventsService.notifyNewMatch(data.toId, data.toUsername, data.toAvatar, data.toLink, data.cupTitle, data.cupUrl, data.matchId, data._uniqueId);
+  }
+
+  public notifySystemEvent(data: { user: UserEntity, prefix: string, title: string, link: string, postfix: string, payload: ButtonEventPayload, _uniqueId: string }) {
+    this.notifyEventsService.notifySystemEvent(data.user, data.prefix, data.title, data.link, data.postfix, data.payload, data._uniqueId);
   }
 }

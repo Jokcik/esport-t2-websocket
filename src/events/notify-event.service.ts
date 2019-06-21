@@ -105,7 +105,7 @@ export class NotifyEventService {
   public notifySystemEvent(user: UserEntity, prefix: string, title: string, link: string, postfix: string, payload: ButtonEventPayload, uniqueId: string) {
     const notify = this.createDefaultNotify();
     notify.info = { prefix, title, link, postfix };
-    notify.to = { avatar: getSystemAvatar() };
+    notify.to = { id: user._id, avatar: getSystemAvatar() };
     notify.payload[0] = payload;
 
     this.newEvent(notify, uniqueId);

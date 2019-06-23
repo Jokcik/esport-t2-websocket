@@ -133,7 +133,13 @@ export class NotifyEventService {
 
   private async newEvent(notify: DeepPartial<NotifyEvent>, uniqueId: string) {
     notify._id = uniqueId || new Types.ObjectId();
-    const event = await this.eventsService.saveEvent(notify);
+    let event;
+    try {
+      event = await this.eventsService.saveEvent(notify);
+    } catch (e) {
+      event = await this.eventsService.saveEvent(notify);
+    }
+
     this.clientService.sendTo(event.to.id, WebsocketEvents.NEW_EVENT, event)
   }
 }

@@ -15,7 +15,7 @@ export class WebsocketFeedController {
 
   public notifyObjects(client: ISocket, data: any) {
     client.join(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`);
-    client.on('disconnect', () => client.leave(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`));
+    // client.on('disconnect', () => client.leave(`${WebsocketEvents.NOTIFY_OBJECTS}:${data}`));
     return EMPTY;
   }
 

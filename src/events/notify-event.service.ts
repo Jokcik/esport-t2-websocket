@@ -1,19 +1,23 @@
-import {Injectable} from "@nestjs/common";
-import {EventsService} from "./events.service";
-import {DeepPartial} from "../core/constants";
+import { Injectable } from '@nestjs/common';
+import { Types } from 'mongoose';
+import { UserEntity } from '../authenticate/shared/a-user';
+import { DeepPartial } from '../core/constants';
+import { WebsocketEvents } from '../websocket/shared/events';
+import { WebsocketClientsService } from '../websocket/websocket-clients/websocket-clients.service';
+import { EventsService } from './events.service';
+import { getSystemAvatar, getUserAvatar } from './interface/avatar-notify';
 import { ButtonEventPayload, EventTypeButton, EventTypeEnum, NotifyEvent, Status } from './interface/event';
 import {
   getChannelLink,
-  getChannelSettingsLink, getCupLink, getCupsLink, getMatchLink,
+  getChannelSettingsLink,
+  getCupLink,
+  getCupsLink,
+  getMatchLink,
   getPremiumSettingsLink,
-  getTeamLink, getTeamPlayersLink,
-  getUserLink
-} from "./interface/link-notify";
-import { getSystemAvatar, getUserAvatar } from './interface/avatar-notify';
-import {WebsocketClientsService} from "../websocket/websocket-clients/websocket-clients.service";
-import {WebsocketEvents} from "../websocket/shared/events";
-import {AUser, UserEntity} from "../authenticate/shared/a-user";
-import {Types} from "mongoose";
+  getTeamLink,
+  getTeamPlayersLink,
+  getUserLink,
+} from './interface/link-notify';
 
 @Injectable()
 export class NotifyEventService {
@@ -34,7 +38,12 @@ export class NotifyEventService {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
     const link = getChannelLink(user.username);
 
-    notify.info = { prefix: 'ваш канал', title: `https://cyberhero.tele2.ru${link}`, link, postfix: 'успешно создан. Для настроек канала перейдите на страницу Мой канал' };
+    notify.info = {
+      prefix: 'ваш канал',
+      title: `https://cyberhero.tele2.ru${link}`,
+      link,
+      postfix: 'успешно создан. Для настроек канала перейдите на страницу Мой канал',
+    };
     notify.to = { id: user._id, avatar: getUserAvatar(user.avatar), link: getUserLink(user.username), title: user.username };
     notify.payload[0].link = getChannelSettingsLink(user.username);
     notify.payload[0].title = 'Мой канал';
@@ -54,7 +63,12 @@ export class NotifyEventService {
 
   public notifyCreateTeam(user: UserEntity, teamTitle: string, teamId: string, uniqueId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
-    notify.info = { prefix: 'ваша команда', title: teamTitle, link: getTeamLink(teamId), postfix: 'успешно создана. Чтобы пригласить игроков, перейдите на страницу настроек' };
+    notify.info = {
+      prefix: 'ваша команда',
+      title: teamTitle,
+      link: getTeamLink(teamId),
+      postfix: 'успешно создана. Чтобы пригласить игроков, перейдите на страницу настроек',
+    };
     notify.to = { id: user._id, avatar: getUserAvatar(user.avatar), link: getUserLink(user.username), title: user.username };
     notify.payload[0].link = getTeamPlayersLink(teamId);
     notify.payload[0].title = 'Управление командой';
@@ -74,7 +88,12 @@ export class NotifyEventService {
 
   public notifyRegisterCup(toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, uniqueId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
-    notify.info = { prefix: 'ваша заявка на участие в турнире', title: cupTitle, link: getCupLink(cupUrl), postfix: 'зарегистрирована. Для получения подробной информации о турнире – перейдите на страницу турнира' };
+    notify.info = {
+      prefix: 'ваша заявка на участие в турнире',
+      title: cupTitle,
+      link: getCupLink(cupUrl),
+      postfix: 'зарегистрирована. Для получения подробной информации о турнире – перейдите на страницу турнира',
+    };
     notify.to = { id: toId, avatar: toAvatar, link: toLink, title: toUsername };
     notify.payload[0].link = getCupLink(cupUrl);
     notify.payload[0].title = 'Страница турнира';
@@ -94,7 +113,12 @@ export class NotifyEventService {
 
   public notifyNewMatchPubg(toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, uniqueId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
-    notify.info = { prefix: 'турнир', title: cupTitle, link: getCupLink(cupUrl), postfix: 'начался. ID лобби и пароль уже доступны на странице вашего матча.' };
+    notify.info = {
+      prefix: 'турнир',
+      title: cupTitle,
+      link: getCupLink(cupUrl),
+      postfix: 'начался. ID лобби и пароль уже доступны на странице вашего матча.',
+    };
     notify.to = { id: toId, avatar: toAvatar, link: toLink, title: toUsername };
     notify.payload[0].link = getMatchLink(cupUrl, matchId);
     notify.payload[0].title = 'Страница матча';
@@ -104,7 +128,7 @@ export class NotifyEventService {
 
   public notifyNewMatch(toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, uniqueId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
-    notify.info = { prefix: "у вас есть новый матч. Для получения более подробной информации – перейдите на страницу матча" };
+    notify.info = { prefix: 'у вас есть новый матч. Для получения более подробной информации – перейдите на страницу матча' };
     notify.to = { id: toId, avatar: toAvatar, link: toLink, title: toUsername };
     notify.payload[0].link = getMatchLink(cupUrl, matchId);
     notify.payload[0].title = 'Страница матча';
@@ -140,7 +164,7 @@ export class NotifyEventService {
     notify.type = EventTypeEnum.NOTIFY;
     notify.createdAt = new Date();
     notify.status = Status.ACTIVE;
-    notify.payload = [ { action: EventTypeButton.CONFIRM, title: 'Подтвердить' } ];
+    notify.payload = [{ action: EventTypeButton.CONFIRM, title: 'Подтвердить' }];
 
     return notify;
   }
@@ -154,6 +178,6 @@ export class NotifyEventService {
       event = await this.eventsService.saveEvent(notify);
     }
 
-    this.clientService.sendTo(event.to.id, WebsocketEvents.NEW_EVENT, event)
+    this.clientService.sendTo(event.to.id, WebsocketEvents.NEW_EVENT, event);
   }
 }

@@ -92,6 +92,16 @@ export class NotifyEventService {
     this.newEvent(notify, uniqueId);
   }
 
+  public notifyNewMatchPubg(toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, uniqueId: string) {
+    const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
+    notify.info = { prefix: 'турнир', title: cupTitle, link: getCupLink(cupUrl), postfix: 'начался. ID лобби и пароль уже доступны на странице вашего матча.' };
+    notify.to = { id: toId, avatar: toAvatar, link: toLink, title: toUsername };
+    notify.payload[0].link = getMatchLink(cupUrl, matchId);
+    notify.payload[0].title = 'Страница матча';
+
+    this.newEvent(notify, uniqueId);
+  }
+
   public notifyNewMatch(toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, uniqueId: string) {
     const notify: DeepPartial<NotifyEvent> = this.createDefaultNotify();
     notify.info = { prefix: "у вас есть новый матч. Для получения более подробной информации – перейдите на страницу матча" };

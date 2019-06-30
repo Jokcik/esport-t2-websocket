@@ -1,7 +1,7 @@
-import {Injectable} from "@nestjs/common";
-import {NotifyEventService} from "../events/notify-event.service";
-import {UserEntity} from "../authenticate/shared/a-user";
+import { Injectable } from '@nestjs/common';
+import { UserEntity } from '../authenticate/shared/a-user';
 import { ButtonEventPayload } from '../events/interface/event';
+import { NotifyEventService } from '../events/notify-event.service';
 
 @Injectable()
 export class NotifyRedisService {
@@ -38,6 +38,10 @@ export class NotifyRedisService {
 
   public notifyConfirmCup(data: { toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, _uniqueId: string }) {
     this.notifyEventsService.notifyConfirmCup(data.toId, data.toUsername, data.toAvatar, data.toLink, data.cupTitle, data.cupUrl, data._uniqueId);
+  }
+
+  public notifyNewMatchPubg(data: { toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, _uniqueId: string }) {
+    this.notifyEventsService.notifyNewMatchPubg(data.toId, data.toUsername, data.toAvatar, data.toLink, data.cupTitle, data.cupUrl, data.matchId, data._uniqueId);
   }
 
   public notifyNewMatch(data: { toId: string, toUsername: string, toAvatar: string, toLink: string, cupTitle: string, cupUrl: string, matchId: number, _uniqueId: string }) {

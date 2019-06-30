@@ -28,7 +28,7 @@ cluster.on('exit', (worker) => {
   delete workers[worker.id];
 
   const newWorker = cluster.fork(env);
-  workers[newWorker.id] = { worker: newWorker, env};
+  workers[newWorker.id] = { worker: newWorker, env };
 });
 
 if (cluster.isWorker) {

@@ -2,10 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../authenticate/shared/a-user';
 import { ButtonEventPayload } from '../events/interface/event';
 import { NotifyEventService } from '../events/notify-event.service';
+import {Injectable} from "@nestjs/common";
+import {NotifyEventService} from "../events/notify-event.service";
+import {UserEntity} from "../authenticate/shared/a-user";
+import { ButtonEventPayload, NotifyEvent } from '../events/interface/event';
+import { DeepPartial } from '../core/constants';
 
 @Injectable()
 export class NotifyRedisService {
   constructor(private notifyEventsService: NotifyEventService) {
+  }
+
+  public notifyEvent(data: { event: DeepPartial<NotifyEvent>, _uniqueId: string }) {
+    this.notifyEventsService.notifyEvent(data.event, data._uniqueId)
   }
 
   public eventChannelOnline(data: { user: UserEntity, title: string, _uniqueId: string }) {

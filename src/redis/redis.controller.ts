@@ -37,6 +37,9 @@ export class RedisController implements OnModuleInit {
       case FeedTypes.NEW_MATCH_PUBG: return this.notifyRedisService.notifyNewMatchPubg(data);
 
       case FeedTypes.SYSTEM_MESSAGE: return this.notifyRedisService.notifySystemEvent(data);
+
+
+      case FeedTypes.NEW_EVENT: return this.notifyRedisService.notifyEvent(data);
     }
   }
 

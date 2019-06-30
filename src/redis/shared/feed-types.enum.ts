@@ -11,4 +11,5 @@ export enum FeedTypes {
   NEW_MATCH = 'NEW_MATCH',
 
   SYSTEM_MESSAGE = 'SYSTEM_MESSAGE',
+  NEW_EVENT = 'NEW_EVENT',
 }

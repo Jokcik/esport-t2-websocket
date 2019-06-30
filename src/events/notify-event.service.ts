@@ -111,6 +111,10 @@ export class NotifyEventService {
     this.newEvent(notify, uniqueId);
   }
 
+  public notifyEvent(event: DeepPartial<NotifyEvent>, uniqueId: string) {
+    this.newEvent(event, uniqueId);
+  }
+
   public notifyStreamerOnline(user: UserEntity, streamerName: string, uniqueId: string) {
     const notify = this.createDefaultNotify();
     notify.info = { prefix: 'Канал', title: streamerName, link: getChannelLink(streamerName), postfix: 'начал прямую трансляцию' };

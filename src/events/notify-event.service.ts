@@ -137,6 +137,11 @@ export class NotifyEventService {
 
   private async newEvent(notify: DeepPartial<NotifyEvent>, uniqueId: string) {
     notify._id = uniqueId || new Types.ObjectId();
+    notify.createdAt = notify.createdAt || new Date();
+    notify.type = notify.type || EventTypeEnum.NOTIFY;
+    notify.status = notify.status || Status.ACTIVE;
+    notify.payload = notify.payload || [];
+
     let event;
     try {
       event = await this.eventsService.saveEvent(notify);

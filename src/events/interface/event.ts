@@ -29,11 +29,6 @@ export enum EventTypeEnum {
   NOTIFY = 'NOTIFY',
 }
 
-// export class EventType {
-//   actions: EventTypeEnum[];
-//   name: string;
-// }
-
 export class EventObj {
   id: string;
   title: string;

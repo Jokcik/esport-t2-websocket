@@ -34,6 +34,11 @@ export class WebsocketFeedController {
       .pipe(map(events => this.wrapWsResponse(WebsocketEvents.GET_EVENTS, events)));
   }
 
+  public deleteEvents(client: ISocket): Observable<WsResponse<NotifyEvent[]>> {
+    return fromPromise(this.socketFeed.deleteEvents(client.user))
+      .pipe(map(events => this.wrapWsResponse(WebsocketEvents.GET_EVENTS, events)));
+  }
+
   public readEvents(client: ISocket, data?: { eventIds: string[] }): Observable<WsResponse<NotifyEvent[]>> {
     return fromPromise(this.socketFeed.readEvents(client.user, data.eventIds))
       .pipe(map(events => this.wrapWsResponse(WebsocketEvents.GET_EVENTS, events)));

@@ -1,18 +1,12 @@
-import {
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer, WsResponse
-} from "@nestjs/websockets";
-import { Server } from 'socket.io';
 import { Inject, Logger, OnModuleInit } from '@nestjs/common';
-import {WebsocketService} from "./websocket-clients/websocket.service";
-import {ISocket} from "./shared/socket.interface";
-import {WebsocketEvents} from "./shared/events";
-import {EMPTY, Observable} from "rxjs";
-import {catchError} from "rxjs/operators";
-import {WebsocketFeedController} from "./websocket-feed/websocket-feed.controller";
+import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Server } from 'socket.io';
+import { WebsocketEvents } from './shared/events';
+import { ISocket } from './shared/socket.interface';
+import { WebsocketService } from './websocket-clients/websocket.service';
+import { WebsocketFeedController } from './websocket-feed/websocket-feed.controller';
 
 @WebSocketGateway({ path: '/feed', transports: ['websocket'] })
 export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnect, OnModuleInit {
@@ -28,7 +22,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     try {
       this.websocketService.handleConnection(client);
     } catch (e) {
-      console.log('error handleConnection')
+      console.log('error handleConnection');
     }
   }
 
@@ -36,7 +30,7 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     try {
       this.websocketService.handleDisconnect(client);
     } catch (e) {
-      console.log('error handleDisconnect')
+      console.log('error handleDisconnect');
     }
   }
 
@@ -56,8 +50,13 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
   }
 
   @SubscribeMessage(WebsocketEvents.DELETE_EVENT)
-  public deleteEvents(client: ISocket, data: any): Observable<WsResponse<any>> {
+  public deleteEvent(client: ISocket, data: any): Observable<WsResponse<any>> {
     return this.onResult(this.websocketFeedController.deleteEvent(client, data));
+  }
+
+  @SubscribeMessage(WebsocketEvents.DELETE_EVENTS)
+  public deleteEvents(client: ISocket, data: any): Observable<WsResponse<any>> {
+    return this.onResult(this.websocketFeedController.deleteEvents(client));
   }
 
   @SubscribeMessage(WebsocketEvents.READ_EVENTS)
@@ -65,14 +64,14 @@ export class WebsocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     return this.onResult(this.websocketFeedController.readEvents(client, data));
   }
 
+  onModuleInit(): any {
+    this.websocketService.setServer(this.server);
+  }
+
   private onResult<T>(observable: Observable<T>) {
     return observable.pipe(catchError(value => {
       this.logger.log('error onResult', value);
       return EMPTY;
     }));
-  }
-
-  onModuleInit(): any {
-    this.websocketService.setServer(this.server);
   }
 }

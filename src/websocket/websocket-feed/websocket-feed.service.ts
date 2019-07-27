@@ -16,6 +16,11 @@ export class WebsocketFeedService {
     return this.getEvents(user._id);
   }
 
+  public async deleteEvents(user: AUser) {
+    await this.eventService.deleteEvents(user);
+    return this.getEvents(user._id);
+  }
+
   public async readEvents(user: AUser, eventIds: string[]) {
     await this.eventService.readEvents(user, eventIds);
     return this.getEvents(user._id);

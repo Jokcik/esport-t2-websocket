@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cluster from 'cluster';
+const numCPUs = require('os').cpus().length;
 
 const workers: { [id: number]:  { worker: any, env: any } } = {};
 

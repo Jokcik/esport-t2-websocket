@@ -17,7 +17,8 @@ export class EventsService {
 
   public async getEvents(userId: string) {
     return this.eventModel.find({ 'to.id': userId, status: { $not: { $eq: Status.DELETED } } })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .limit(20);
   }
 
   public async deleteEvent(user: AUser, eventId: string): Promise<NotifyEvent> {
